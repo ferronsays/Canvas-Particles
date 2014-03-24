@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <script src="http://code.jquery.com/jquery-latest.js"></script>
+    <script src="vendor/Vector2D.min.js" type="text/javascript"></script>
+    <script src="vendor/Pollock.min.js" type="text/javascript"></script>
+    <script src="js/Particle.js" type="text/javascript"></script>
+    <script src="js/ParticleEmitter.js" type="text/javascript"></script>
+</head>
+<body>
+    <canvas id="c" width="400" height="250" style="background: #333;"></canvas>
+
+    <script type="text/javascript">
+    var scene;
+
+    function initialize() {
+
+        //initialize the scene
+        //this is a simple class that manages the canvas we're using
+        scene = new Pollock({
+            canvasID: "c", //give it the id of the canvas element
+            click: function(event){
+                console.log(event);
+            },
+        });
+
+        var fireDirection = -Math.PI/2;
+        var fireDirectionVariance = 6*Math.PI/180;
+        //create a 'fire' emitter
+        scene.addChild(new ParticleEmitter({
+            position: new Vector2D(scene.width / 3, scene.height * 3 / 4),
+            context: scene.context,
+            blendMode: "lighter",
+            radial: false,
+            sharpness: 50,
+            sharpnessVariance: 0,
+            maxParticles: 100,
+            alive: true,
+            positionVariance: new Vector2D(1, 1),
+            radius: 0,
+            circularDistribution: false,
+            direction: fireDirection,
+            directionVariance: fireDirectionVariance,
+            speed: 1,
+            speedVariance: 0.5,
+            size: 10,
+            sizeVariance: 5,
+            endSize: 1,
+            endSizeVariance: 0,
+            life: 1000,
+            lifeVariance: 500,
+            color: [2.77, 2.81, 14.37, 0.5],
+            colorVariance: [42.18507668447355, 0, 0, 0],
+            endColor: [255, 77, 0, 0.1],
+            endColorVariance: [0, 0, 0, 0],
+            duration: -1,
+            gravitate: false
+        }));
+
+        //setting a wind force for the smoke emitter
+        //this accelerates them, so you'll want small numbers here
+        var wind = new Vector2D(.004, 0);
+        var smokeDirection = -Math.PI/2;
+        var smokeDirectionVariance = 5*Math.PI/180;
+        //create a 'smoke' emitter
+        scene.addChild(new ParticleEmitter({
+            position: new Vector2D(scene.width / 3, scene.height * 3 / 4),
+            context: scene.context,
+            radial: true,
+            sharpness: 50,
+            sharpnessVariance: 0,
+            maxParticles: 125,
+            alive: true,
+            positionVariance: new Vector2D(1, 1),
+            radius: 0,
+            circularDistribution: false,
+            direction: smokeDirection,
+            directionVariance: smokeDirectionVariance,
+            speed: 0.75,
+            speedVariance: 0.25,
+            size: 10,
+            sizeVariance: 5,
+            endSize: 100,
+            endSizeVariance: 20,
+            life: 8000,
+            lifeVariance: 1000,
+            color: [0, 0, 0, 0.75],
+            colorVariance: [0, 0, 0, 0],
+            endColor: [255, 255, 255, 0.1],
+            endColorVariance: [0, 0, 0, 0],
+            duration: -1,
+            gravitate: true,
+            forceVector: wind
+        }));
+
+        scene.enable();
+    }
+    window.onload = function() {
+        initialize();
+    };
+    </script>
+</body>
+
+</html>
